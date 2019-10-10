@@ -12,3 +12,57 @@ attach(data)
 
 ```
 
+
+
+##Initial study to observe the nature of the relationship between the volume of shortleaf pines and their diameters 
+
+__Graphical Method:__ Scatter Plot
+```{r}
+plot(Diameter, Volume, pch = 19, cex = 1.5, col = "blue", main = "Scatter plot between volume and diamater of shortleaf pines")
+```
+The scatterplot shows a positive trend, however; it appears to be non-linear.
+
+__Numerical Method:__ Pearson Linear Correlation Coefficient 
+```{r}
+r <- cor(Diameter, Volume)
+r
+```
+The r value of 0.9447509 suggests that there is a strong positive linear correlation between tree diameter and volume.
+
+__Based on the scatter plot and the r value, fitting a linear relationship is reasonable.__ 
+
+##Fit a least square regression line to predict the volume based on the diameter.
+```{r}
+regModel <- lm(Diameter ~ Volume)
+regModel
+```
+
+$y_i = 6.6285 +0.1306x_i + e_i$ for $i=1,2,\cdots,83$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+
+##Check linearity and constant variance conditions:
+```{r}
+# find residuals
+residuals <- resid(regModel)
+residuals
+
+# find predicted values
+predValues <- predict(regModel)
+predValues
+
+# plot the predicted values against the residuals
+plot(predValues, residuals)
+abline(0,0, col="red")
+```
+The condition of constant variance and linearity are not met, as the scatterplot of residuals shows a clear nonlinear trend and the variance fans out. This suggests that we need to perform a transformation.
+
+##Check normality of residuals
+```{r}
+hist(residuals)
+qqnorm(residuals, pch = 19, col= "blue")
+qqline(residuals, col="red")
+
+m <- mean(residuals)
+m
+the zero mean condition holds.
+```
+The histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Therefore, the normaility condition is also violated, suggesting that we need a trasformation. 
