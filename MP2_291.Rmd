@@ -37,7 +37,13 @@ regModel <- lm(Diameter ~ Volume)
 regModel
 ```
 
-$y_i = 6.6285 +0.1306x_i + e_i$ for $i=1,2,\cdots,83$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+$y_i = 6.6285 +0.1306x_i + e_i$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+
+```{r}
+plot(Diameter, Volume, pch = 16, main = "Fitted Regression Line")
+abline(regModel, col= "blue", lwd = 2)
+
+```
 
 ##Check linearity and constant variance conditions:
 ```{r}
@@ -66,3 +72,19 @@ m
 the zero mean condition holds.
 ```
 The histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Therefore, the normaility condition is also violated, suggesting that we need a trasformation. 
+
+
+```{r}
+sqrt_Y = sqrt(Volume)
+r = cor(sqrt_Y, Diameter)
+r
+
+plot(Diameter, sqrt_Y, pch = 16, ylab = "Volume", xlab = "Diamater", main = "scatter plot between volume and diamater")
+```
+The scatterplot drawn between the transformed Y and X reflects a linear relationship, with a r value of 0.987 suggesting a strong linear relationship between sqrt(Y) and X modeled by the following:
+
+```{r}
+newRegModel <- lm(sqrt_Y~Diameter)
+newRegModel
+```
+$sqrt(y_i) = -1.1366 + 0.5832x_i + e_i$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
