@@ -20,7 +20,7 @@ __Graphical Method:__ Scatter Plot
 ```{r}
 plot(Diameter, Volume, pch = 19, cex = 1.5, col = "blue", main = "Scatter plot between volume and diamater of shortleaf pines")
 ```
-The scatterplot shows a positive trend, however; it appears to be non-linear.
+The scatterplot shows a positive trend, however; it appears to be slightly non-linear.
 
 __Numerical Method:__ Pearson Linear Correlation Coefficient 
 ```{r}
@@ -69,11 +69,11 @@ qqline(residuals, col="red")
 
 m <- mean(residuals)
 m
-the zero mean condition holds.
+# the zero mean condition holds.
 ```
-The histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Therefore, the normaility condition is also violated, suggesting that we need a trasformation. 
+While the mean of the residuals is very close to 0 and and the zero mean condition holds, the histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Therefore, the normaility condition is also violated, suggesting that we need a trasformation. 
 
-
+## Remedial Measures
 ```{r}
 sqrt_Y = sqrt(Volume)
 r = cor(sqrt_Y, Diameter)
@@ -88,3 +88,36 @@ newRegModel <- lm(sqrt_Y~Diameter)
 newRegModel
 ```
 $sqrt(y_i) = -1.1366 + 0.5832x_i + e_i$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+
+## Plot new model
+```{r}
+plot(Diameter, sqrt_Y, pch = 16, main = "Fitted Regression Line")
+abline(newRegModel, col= "blue", lwd = 2)
+```
+
+##Check linearity and constant variance conditions of new model:
+```{r}
+# find residuals
+newResiduals <- resid(newRegModel)
+newResiduals
+
+# find predicted values
+newPredValues <- predict(newRegModel)
+newPredValues
+
+# plot the predicted values against the residuals
+plot(newPredValues, newResiduals)
+abline(0,0, col="red")
+```
+
+
+## Check normality of new residual values:
+```{r}
+hist(newResiduals)
+qqnorm(newResiduals, pch = 19, col= "blue")
+qqline(newResiduals, col="red")
+
+m <- mean(newResiduals)
+m
+```
+
