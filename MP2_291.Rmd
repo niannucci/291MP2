@@ -59,7 +59,7 @@ predValues
 plot(predValues, residuals)
 abline(0,0, col="red")
 ```
-The condition of constant variance and linearity are not met, as the scatterplot of residuals shows a clear nonlinear trend and the variance fans out. This suggests that we need to perform a transformation.
+The condition of constant variance and linearity are not met, as the variance fans out and the scatterplot of residuals shows a clear nonlinear trend. This suggests that we need to perform a transformation.
 
 ##Check normality of residuals
 ```{r}
@@ -109,6 +109,7 @@ newPredValues
 plot(newPredValues, newResiduals)
 abline(0,0, col="red")
 ```
+While better than the first model, the variance of the residuals is still not constant. There does appear to be a slight linear trend. We could perform another transformation.
 
 
 ## Check normality of new residual values:
@@ -120,4 +121,4 @@ qqline(newResiduals, col="red")
 m <- mean(newResiduals)
 m
 ```
-
+The distribution of the new residuals, while better than the first model, is still skewed left. Most of the points on the Q-Q line are linear but then stray as the theoretical quantities move more negative and more positive. Mean zero condition is met as the mean of the residuals is very close to 0. We could perform another tranformation to create a stronger model between the variables.
