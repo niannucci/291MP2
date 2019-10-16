@@ -33,11 +33,11 @@ __Based on the r value, fitting a linear relationship might be reasonable. Howev
 
 ##Fit a least square regression line to predict the volume based on the diameter.
 ```{r}
-regModel <- lm(Diameter ~ Volume)
+regModel <- lm(Volume~Diameter)
 regModel
 ```
 
-$$y_i = 6.6285 +0.1306x_i + e_i$$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+$$y_i = -41.568 + 6.837x_i + e_i$$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
 
 ```{r}
 plot(Diameter, Volume, pch = 16, main = "Fitted Regression Line")
@@ -89,7 +89,7 @@ qqline(residuals, col="red")
 ## Numerical Method
 shapiro.test(residuals)
 ```
-At a 5% level, the Shapiro-Wilk test suggests the residuals follow a normal distribution. However, the histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Numerically, normality holds but graphically it does not. Therefore, we have chosen to do a transformation. 
+At a 5% level, the Shapiro-Wilk test suggests the residuals do not follow a normal distribution, as the p-value is less than 0.05. However, the histogram of residuals appears to be right-skewed, and the points on the normal Q-Q plot are not linear. Numerically and graphically normality does not hold. Therefore, we have chosen to do a transformation. 
 
 ---
 
