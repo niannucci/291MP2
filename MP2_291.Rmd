@@ -12,14 +12,13 @@ attach(data)
 
 ```
 
-
-
 ##Initial study to observe the nature of the relationship between the volume of shortleaf pines and their diameters 
 
 __Graphical Method:__ Scatter Plot
 ```{r}
 plot(Diameter, Volume, pch = 19, cex = 1.5, col = "blue", main = "Scatter plot between volume and diamater of shortleaf pines")
 ```
+
 The scatterplot shows a positive trend, however; it appears to be slightly non-linear.
 
 __Numerical Method:__ Pearson Linear Correlation Coefficient 
@@ -27,6 +26,7 @@ __Numerical Method:__ Pearson Linear Correlation Coefficient
 r <- cor(Diameter, Volume)
 r
 ```
+
 The r value of 0.9447509 suggests that there is a strong positive linear correlation between tree diameter and volume.
 
 __Based on the r value, fitting a linear relationship might be reasonable. However, the non-linear trend in the scatter plot suggests that a linear relationship may not be best, so we will fit a linear relationship and then assess whether or not it is a good fit. __ 
@@ -37,7 +37,7 @@ regModel <- lm(Diameter ~ Volume)
 regModel
 ```
 
-$y_i = 6.6285 +0.1306x_i + e_i$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+$$y_i = 6.6285 +0.1306x_i + e_i$$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
 
 ```{r}
 plot(Diameter, Volume, pch = 16, main = "Fitted Regression Line")
@@ -45,7 +45,9 @@ abline(regModel, col= "blue", lwd = 2)
 
 ```
 
-##Check linearity and constant variance conditions:
+##Check Conditions:
+
+###__Find Residuals and Predicted Values:__
 ```{r}
 # find residuals
 residuals <- resid(regModel)
@@ -54,26 +56,45 @@ residuals
 # find predicted values
 predValues <- predict(regModel)
 predValues
+```
 
+
+###__Zero Mean:__
+```{r}
+m <- mean(residuals)
+m
+# the zero mean condition holds.
+```
+The mean of the residuals is very close to 0 and and the zero mean condition holds
+
+
+###__Linearity and Constant Variance:__
+```{r}
 # plot the predicted values against the residuals
 plot(predValues, residuals)
 abline(0,0, col="red")
 ```
 The condition of constant variance and linearity are not met, as the variance fans out and the scatterplot of residuals shows a clear nonlinear trend. This suggests that we need to perform a transformation.
 
-##Check normality of residuals
+
+###__Normality:__
 ```{r}
+# Histogram
 hist(residuals)
+
+# Q-Q Plot
 qqnorm(residuals, pch = 19, col= "blue")
 qqline(residuals, col="red")
 
-m <- mean(residuals)
-m
-# the zero mean condition holds.
+## Numerical Method
+shapiro.test(residuals)
 ```
-While the mean of the residuals is very close to 0 and and the zero mean condition holds, the histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Therefore, the normaility condition is also violated, suggesting that we need a trasformation. 
+At a 5% level, the Shapiro-Wilk test suggests the residuals follow a normal distribution. However, the histogram of residuals appears to be left-skewed, and the points on the normal Q-Q plot are not linear. Numerically, normality holds but graphically it does not. Therefore, we have chosen to do a transformation. 
+
+---
 
 ## Remedial Measures
+For our transformation we have decided to transform Y because constant variance is one of the  one of the conditions violated in our first model. $$ transformation: y = \sqrt{y}$$
 ```{r}
 sqrt_Y = sqrt(Volume)
 r = cor(sqrt_Y, Diameter)
@@ -87,7 +108,7 @@ The scatterplot drawn between the transformed Y and X reflects a linear relation
 newRegModel <- lm(sqrt_Y~Diameter)
 newRegModel
 ```
-$sqrt(y_i) = -1.1366 + 0.5832x_i + e_i$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
+$$\sqrt{y_i} = -1.1366 + 0.5832x_i + e_i$$ for $i=1,2,\cdots,70$ where y is the tree volume, x is the tree diameter, and e is the random error with the assumptions $e_i \stackrel{iid}\sim N(0, \sigma^2)$.
 
 ## Plot new model
 ```{r}
@@ -95,7 +116,9 @@ plot(Diameter, sqrt_Y, pch = 16, main = "Fitted Regression Line")
 abline(newRegModel, col= "blue", lwd = 2)
 ```
 
-##Check linearity and constant variance conditions of new model:
+##Check conditions for new model:
+
+###__Find new Residuals and new Predicted Values:__
 ```{r}
 # find residuals
 newResiduals <- resid(newRegModel)
@@ -104,21 +127,30 @@ newResiduals
 # find predicted values
 newPredValues <- predict(newRegModel)
 newPredValues
+```
 
+
+###__Zero Mean:__
+```{r}
+m <- mean(newResiduals)
+m
+```
+
+###__Linearity and Constant Variance:__
+```{r}
 # plot the predicted values against the residuals
 plot(newPredValues, newResiduals)
 abline(0,0, col="red")
 ```
-While better than the first model, the variance of the residuals is still not constant. There does appear to be a slight linear trend. We could perform another transformation.
-
+The variance of the residuals is fairly constant and there is a slight linear trend. Constant variance and linearity hold.
 
 ## Check normality of new residual values:
 ```{r}
 hist(newResiduals)
+
 qqnorm(newResiduals, pch = 19, col= "blue")
 qqline(newResiduals, col="red")
 
-m <- mean(newResiduals)
-m
+shapiro.test(newResiduals)
 ```
-The distribution of the new residuals, while better than the first model, is still skewed left. Most of the points on the Q-Q line are linear but then stray as the theoretical quantities move more negative and more positive. Mean zero condition is met as the mean of the residuals is very close to 0. We could perform another tranformation to create a stronger model between the variables.
+While the distribution of the new residuals is slightly skewed left, the points on the Q-Q line are linear and the results from the Shapiro-Wilk test at a 5% level suggest that the points follow a normal distribution therefore the condition for normality holds.
