@@ -29,7 +29,7 @@ r
 ```
 The r value of 0.9447509 suggests that there is a strong positive linear correlation between tree diameter and volume.
 
-__Based on the scatter plot and the r value, fitting a linear relationship is reasonable.__ 
+__Based on the r value, fitting a linear relationship might be reasonable. However, the non-linear trend in the scatter plot suggests that a linear relationship may not be best, so we will fit a linear relationship and then assess whether or not it is a good fit. __ 
 
 ##Fit a least square regression line to predict the volume based on the diameter.
 ```{r}
