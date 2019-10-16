@@ -142,7 +142,7 @@ m
 plot(newPredValues, newResiduals)
 abline(0,0, col="red")
 ```
-The variance of the residuals is fairly constant and there is a slight linear trend. Constant variance and linearity hold.
+The variance of the residuals is fairly constant and there is a slight linear trend. This shows considerable improvement from our original model. Constant variance and linearity hold.
 
 ## Check normality of new residual values:
 ```{r}
