@@ -100,7 +100,7 @@ sqrt_Y = sqrt(Volume)
 r = cor(sqrt_Y, Diameter)
 r
 
-plot(Diameter, sqrt_Y, pch = 16, ylab = "Volume", xlab = "Diamater", main = "scatter plot between volume and diamater")
+plot(Diameter, sqrt_Y, pch = 16, ylab = "Volume", xlab = "Diameter", main = "scatter plot between volume and diamater")
 ```
 The scatterplot drawn between the transformed Y and X reflects a linear relationship, with a r value of 0.987 suggesting a strong linear relationship between sqrt(Y) and X modeled by the following:
 
@@ -154,3 +154,6 @@ qqline(newResiduals, col="red")
 shapiro.test(newResiduals)
 ```
 While the distribution of the new residuals is slightly skewed left, the points on the Q-Q line are linear and the results from the Shapiro-Wilk test at a 5% level suggest that the points follow a normal distribution therefore the condition for normality holds.
+
+
+
